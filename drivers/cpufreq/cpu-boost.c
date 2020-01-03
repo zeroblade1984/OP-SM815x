@@ -330,6 +330,7 @@ static int cpu_boost_init(void)
 	cpufreq_register_notifier(&boost_adjust_nb, CPUFREQ_POLICY_NOTIFIER);
 
 	ret = input_register_handler(&cpuboost_input_handler);
-	return 0;
+
+	return ret;
 }
 late_initcall(cpu_boost_init);
