@@ -36,8 +36,8 @@ static struct work_struct input_boost_work;
 
 static bool input_boost_enabled;
 
-static unsigned int input_boost_ms = 40;
-module_param(input_boost_ms, uint, 0644);
+static unsigned int topkek_boost_ms = 200;
+module_param(topkek_boost_ms, uint, 0644);
 
 static unsigned int sched_boost_on_input;
 module_param(sched_boost_on_input, uint, 0644);
@@ -113,7 +113,7 @@ static const struct kernel_param_ops param_ops_input_boost_freq = {
 	.set = set_input_boost_freq,
 	.get = get_input_boost_freq,
 };
-module_param_cb(input_boost_freq, &param_ops_input_boost_freq, NULL, 0644);
+module_param_cb(topkek_boost_freq, &param_ops_input_boost_freq, NULL, 0644);
 
 /*
  * The CPUFREQ_ADJUST notifier is used to override the current policy min to
