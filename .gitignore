@@ -133,3 +133,5 @@ kernel/configs/android-*.cfg
 *.list
 out/
 patches/
+build.sh
+build.yml
