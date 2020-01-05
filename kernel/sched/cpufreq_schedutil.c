@@ -32,6 +32,7 @@ struct sugov_tunables {
 	unsigned int hispeed_freq;
 	unsigned int threshold_freq;
 	bool powersave;
+	bool performance;
 	bool pl;
 	bool iowait_boost_enable;
 };
@@ -832,6 +833,24 @@ static ssize_t powersave_store(struct gov_attr_set *attr_set, const char *buf,
 	return count;
 }
 
+static ssize_t performance_show(struct gov_attr_set *attr_set, char *buf)
+{
+	struct sugov_tunables *tunables = to_sugov_tunables(attr_set);
+
+	return scnprintf(buf, PAGE_SIZE, "%u\n", tunables->performance);
+}
+
+static ssize_t performance_store(struct gov_attr_set *attr_set, const char *buf,
+				   size_t count)
+{
+	struct sugov_tunables *tunables = to_sugov_tunables(attr_set);
+
+	if (kstrtobool(buf, &tunables->performance))
+		return -EINVAL;
+
+	return count;
+}
+
 static ssize_t pl_show(struct gov_attr_set *attr_set, char *buf)
 {
 	struct sugov_tunables *tunables = to_sugov_tunables(attr_set);
@@ -877,6 +896,7 @@ static struct governor_attr hispeed_load = __ATTR_RW(hispeed_load);
 static struct governor_attr hispeed_freq = __ATTR_RW(hispeed_freq);
 static struct governor_attr threshold_freq = __ATTR_RW(threshold_freq);
 static struct governor_attr powersave = __ATTR_RW(powersave);
+static struct governor_attr performance = __ATTR_RW(performance);
 static struct governor_attr pl = __ATTR_RW(pl);
 static struct governor_attr iowait_boost_enable = __ATTR_RW(iowait_boost_enable);
 
@@ -887,6 +907,7 @@ static struct attribute *sugov_attributes[] = {
 	&hispeed_freq.attr,
 	&threshold_freq.attr,
 	&powersave.attr,
+	&performance.attr,
 	&pl.attr,
 	&iowait_boost_enable.attr,
 	NULL
@@ -1085,6 +1106,7 @@ static int sugov_init(struct cpufreq_policy *policy)
 	tunables->hispeed_freq = 0;
 	tunables->threshold_freq = 0;
 	tunables->powersave = 0;
+	tunables->performance = 0;
 
 	tunables->iowait_boost_enable = false;
 
